@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+:root {
+    --primary: #2c3e50;
+    --secondary: #3498db;
+    --ternery:rgb(0, 142, 230);
+    --accent: #e74c3c;
+    --success: #2ecc71;
+    --background: #f5f6fa;
+    --gradient: linear-gradient(135deg, #2c3e50, #3498db);
+}
+a {
+    text-decoration: none;
+    color: white;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background: var(--background);
+}
+
+nav {
+    background: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo img {
+    height: 60px;
+   
+}
+
+
+.logo span {
+    font-size: 1.8rem;
+    font-weight: bold;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+    display: flex;
+    gap: 3rem;
+    list-style: none;
+}
+
+.nav-links a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+    background: var(--gradient);
+    color: white;
+}
+
+
+.calculator-section {
+    padding: 4rem 2rem;
+    min-height: 60vh;
+    background:var(--gradient);
+    background-size: cover;
+
+    
+}
+
+.calculator-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #f6f8fd, #e3eeff);
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    animation: slideUp 0.8s ease;
+    backdrop-filter: blur(5px);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e1e8ed;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    outline: none;
+}
+
+button {
+    background: var(--gradient);
+    color: white;
+    padding: 15px 40px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+}
+
+#result {
+    margin-top: 2rem;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.bmi-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 1rem 0;
+}
+
+.bmi-category {
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+footer {
+    background: var(--primary);
+    color: white;
+    padding: 3rem 2rem;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.footer-section h3 {
+    margin-bottom: 1rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.footer-section h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background: var(--secondary);
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.social-links a {
+    color: white;
+    background: rgba(255,255,255,0.1);
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    background: var(--secondary);
+    transform: translateY(-3px);
+}
+
+.copyright {
+    text-align: center;
+    padding-top: 2rem;
+    margin-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .nav-links {
+        margin-top: 1rem;
+        gap: 1rem;
+    }
+    
+    .calculator-container {
+        margin: 1rem;
+        padding: 1.5rem;
+        text-align: center;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .footer-section h3::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .social-links {
+        justify-content: center;
+    }
+}
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="logo.png" alt="MICP">
+            <span><h1>Medical Insurance Cost Prediction</h1></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#calculator">Calculator</a></li>
+        </ul>
+    </nav>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <section class="calculator-section" id="calculator">
+        <div class="calculator-container">
+            <h2>Calculate Your BMI</h2>
+            <form id="bmi-form">
+                <div class="form-group">
+                    <label for="weight">Weight (kg)</label>
+                    <input type="number" id="weight" required step="0.1" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="height">Height (cm)</label>
+                    <input type="number" id="height" required step="0.1" min="0">
+                </div>
+                <button type="submit">Calculate BMI</button>
+            </form>
+            <div id="result">
+                <h3>Your BMI Result</h3>
+                <div class="bmi-value"></div>
+                <div class="bmi-category"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>📞 (+91)-9640396585</p>
+                <p>📧 micp@info.com</p>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-links">
+                    <a href="https://wa.me/1234567890"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://instagram.com/bmicalc"><i class="fab fa-instagram"></i></a>
+                    <a href="https://facebook.com/bmicalc"><i class="fab fa-facebook"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <p><a href="#home">Home</a></p>
+                <p><a href="#calculator">Calculator</a></p>
+                <p><a href="#about">About</a></p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2024 BMI Calculator. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('bmi-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value) / 100; // Convert cm to m
+            
+            const bmi = weight / (height * height);
+            const result = document.getElementById('result');
+            const bmiValue = document.querySelector('.bmi-value');
+            const bmiCategory = document.querySelector('.bmi-category');
+            
+            result.style.display = 'block';
+            bmiValue.textContent = bmi.toFixed(1);
+            
+            let category, color;
+            if (bmi < 18.5) {
+                category = 'Underweight';
+                color = '#3498db';
+            } else if (bmi < 25) {
+                category = 'Normal Weight';
+                color = '#2ecc71';
+            } else if (bmi < 30) {
+                category = 'Overweight';
+                color = '#f1c40f';
+            } else {
+                category = 'Obese';
+                color = '#e74c3c';
+            }
+            
+            bmiCategory.textContent = category;
+            bmiCategory.style.backgroundColor = color + '20';
+            bmiCategory.style.color = color;
+        });
+    </script>
+</body>
+</html>

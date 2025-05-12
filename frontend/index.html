@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Insurance Cost Prediction</title>
+    <style>
+:root {
+    --primary: #2c3e50;
+    --secondary: #3498db;
+    --accent: #e74c3c;
+    --success: #2ecc71;
+    --background: #f5f6fa;
+    --text: #2c3e50;
+    --gradient: linear-gradient(135deg, #2c3e50, #3498db);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background: var(--background);
+    color: var(--text);
+}
+
+nav {
+    background: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: slideDown 0.5s ease;
+}
+a {
+    text-decoration: none;
+    color: white;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo img {
+    height: 60px;
+   
+}
+
+.logo span {
+    font-size: 1.8rem;
+    font-weight: bold;
+    background: var(--gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: fadeIn 1s ease;
+}
+
+.nav-links {
+    display: flex;
+    gap: 3rem;
+    list-style: none;
+}
+
+.nav-links a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+    background: var(--gradient);
+    color: white;
+    transform: translateY(-2px);
+}
+#home h1{
+   font-size: 2em;
+   background: var(--gradient);
+   border-radius: 10px;
+   padding: 2px;
+}
+#home p{
+    font-size: 2em;
+   background: var(--gradient);
+   border-radius: 10px;
+   padding: 2px;
+}
+header {
+    height: 100vh;
+    background: url('carousel-2.jpg');
+    background-size: cover;
+    backdrop-filter: blur(5px);
+    color: white;
+    display: flex;
+    gap: 2px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+#form-section {
+    padding: 100px 0;
+    min-height: 100vh;
+    background: var(--gradient);
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 3rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    animation: slideUp 0.8s ease;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+.form-group:nth-child(1) { animation-delay: 0.1s; }
+.form-group:nth-child(2) { animation-delay: 0.2s; }
+.form-group:nth-child(3) { animation-delay: 0.3s; }
+.form-group:nth-child(4) { animation-delay: 0.4s; }
+.form-group:nth-child(5) { animation-delay: 0.5s; }
+.form-group:nth-child(6) { animation-delay: 0.6s; }
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 1.1rem;
+    transform: translateX(-10px);
+    opacity: 0;
+    animation: slideInLabel 0.5s ease forwards;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e1e8ed;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #f8fafc;
+}
+
+input:focus, select:focus {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    outline: none;
+    transform: scale(1.02);
+}
+
+button {
+    background: var(--gradient);
+    color: white;
+    padding: 15px 40px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+}
+
+button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+button:active::after {
+    width: 300px;
+    height: 300px;
+}
+
+#result {
+    margin-top: 2rem;
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+}
+
+#result.visible {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.prediction-amount {
+    font-size: 3rem;
+    color: var(--success);
+    text-align: center;
+    margin: 2rem 0;
+    padding: 2rem;
+    background: linear-gradient(to right, rgba(46, 204, 113, 0.1), rgba(46, 204, 113, 0.2));
+    border-radius: 15px;
+    animation: pulseGlow 2s infinite;
+}
+
+#health-suggestions {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: #f8fafc;
+    border-radius: 15px;
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+}
+
+#health-suggestions.visible {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.suggestion-item {
+    background: white;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transform: translateX(-20px);
+    opacity: 0;
+    animation: slideInRight 0.5s ease forwards;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from { 
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLabel {
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+}
+
+@keyframes slideInRight {
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    nav {
+        padding: 1rem;
+        flex-direction: column;
+    }
+
+    .nav-links {
+        margin-top: 1rem;
+        gap: 1rem;
+    }
+
+    .container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+}
+ 
+#consultation-section {
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, #e3eeff, #f6f8fd);
+    text-align: center;
+}
+
+.consultation-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    
+}
+
+.consultation-card {
+    background-color: #3498db;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+#col h3{
+    color: white;
+}
+#col p{
+    color: white;
+}
+
+.consultation-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+.consultation-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.consultation-card:hover img {
+    transform: scale(1.1);
+}
+
+.card-content {
+    padding: 1.5rem;
+    text-align: center;
+    background:var(--secondary);
+}
+
+.card-content h3 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.card-content p {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+footer {
+    background: var(--primary);
+    color: white;
+    padding: 3rem 2rem;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.footer-section {
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+.footer-section h3 {
+    margin-bottom: 1rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.footer-section h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background: var(--secondary);
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.social-links a {
+    color: white;
+    background: rgba(255,255,255,0.1);
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    background: var(--secondary);
+    transform: translateY(-3px);
+}
+
+.copyright {
+    text-align: center;
+    padding-top: 2rem;
+    margin-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+@media (max-width: 768px) {
+    .consultation-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .footer-section h3::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .social-links {
+        justify-content: center;
+    }
+}     
+      
+      
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="logo.png" alt="MICP">
+            <span><h1>Medical Insurance Cost Prediction</h1></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#form-section">Predict</a></li>
+            <li><a href="bmi.html">BMI-calculator</a></li>
+        </ul>
+    </nav>
+
+    <header id="home">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <h1>Medical Insurance Cost Predictor</h1>
+        <p>Get accurate predictions based on your health data</p>
+       
+        <a href="#form-section" class="cta-button"> <button>Start Prediction</button></a>
+    </header>
+
+    <section id="form-section">
+        <div class="container">
+            <h2>Enter Your Details</h2>
+            <form id="prediction-form">
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="1">Male</option>
+                        <option value="0">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="children">Number of Children</label>
+                    <input type="number" id="children" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="smoker">Do you smoke?</label>
+                    <select id="smoker" required>
+                        <option value="">Select Option</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="region">Region</label>
+                    <select id="region" required>
+                        <option value="">Select Region</option>
+                        <option value="1">Northwest</option>
+                        <option value="2">Northeast</option>
+                        <option value="3">Southwest</option>
+                        <option value="4">Southeast</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="bmi">BMI</label>
+                    <input type="number" id="bmi" step="0.1" min="0" required>
+                </div>
+                <button type="submit">Predict Cost</button>
+            </form>
+
+            <div id="result">
+                <h3>Predicted Insurance Cost</h3>
+                <div class="prediction-amount"></div>
+            </div>
+
+            <div id="health-suggestions">
+                <h3>Health Suggestions</h3>
+                <div id="suggestions-container"></div>
+            </div>
+        </div>
+    </section>
+  <section id="consultation-section">
+        <h2 class="section-title">Online Consultation</h2>
+        <div class="consultation-container">
+            <div class="consultation-card" onclick="window.location.href='https://www.practo.com'">
+                <div class="card-content" id="col">
+                    <h3>General Consultation</h3>
+                    <p>Connect with general physicians for regular health checkups</p>
+                </div>
+            </div>
+            <div class="consultation-card" onclick="window.location.href='https://www.1mg.com'">
+                <div class="card-content" id="col">
+                    <h3>Specialist Consultation</h3>
+                    <p>Expert care from specialized doctors</p>
+                </div>
+            </div>
+            <div class="consultation-card" onclick="window.location.href='https://www.apollo247.com'">
+                <div class="card-content" id="col">
+                    <h3>Emergency Care</h3>
+                    <p>24/7 emergency medical support</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>📞 (+91)-9640396585</p>
+                <p>📧 info@micp.com</p>
+                <p>🏢 123 Healthcare Ave, Medical District</p>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-links">
+                    <a href="https://wa.me/1234567890" title="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://instagram.com/micp" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://facebook.com/micp" title="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <p><a href="#home">Home</a></p>
+                <p><a href="#form-section">Get Prediction</a></p>
+                <p><a href="bmi.html">BMI-calculator</a></p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2024 Medical Insurance Cost Prediction. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Add Font Awesome for social icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <script>
+        document.getElementById("prediction-form").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const result = document.getElementById('result');
+    const healthSuggestions = document.getElementById('health-suggestions');
+    const suggestionsContainer = document.getElementById('suggestions-container');
+
+    // Show result with animation
+    result.classList.add('visible');
+
+    // Get form data
+    const formData = {
+        age: parseInt(document.getElementById('age').value),
+        gender: document.getElementById('gender').value,
+        bmi: parseFloat(document.getElementById('bmi').value),
+        children: parseInt(document.getElementById('children').value),
+        smoker: document.getElementById('smoker').value,
+        region: document.getElementById('region').value
+    };
+
+    try {
+        const response = await fetch('http://127.0.0.1:5000/getPrediction', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ features: Object.values(formData) })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            document.querySelector('.prediction-amount').textContent = `${parseFloat(data.pred).toLocaleString()}`;
+        } else {
+            document.querySelector('.prediction-amount').textContent = 'Error in prediction';
+            console.error("Prediction error:", data.error);
+        }
+    } catch (error) {
+        document.querySelector('.prediction-amount').textContent = 'Server connection error';
+        console.error("Fetch error:", error);
+    }
+
+    // Show health suggestions
+    healthSuggestions.classList.add('visible');
+    suggestionsContainer.innerHTML = '';
+
+    const suggestions = [];
+    const { age, bmi, smoker } = formData;
+
+    // BMI-based suggestions
+    if (bmi < 18.5) {
+        suggestions.push('Consider consulting with a nutritionist - Your BMI indicates you are underweight');
+    } else if (bmi >= 18.5 && bmi <25){
+        suggestions.push('No specific suggestions.Keep up the good work.')
+    }else if (bmi >= 25 && bmi < 30) {
+        suggestions.push('Consider a balanced diet and regular exercise - Your BMI indicates you are overweight');
+        suggestions.push('Aim for 150 minutes of moderate exercise per week');
+    } else if (bmi >= 30) {
+        suggestions.push('Consider consulting with a nutritionist for a personalized diet plan');
+        suggestions.push('Regular exercise and lifestyle modifications recommended');
+    }
+
+    // Smoking suggestionss
+    if (smoker === '1') {
+        suggestions.push('Consider joining a smoking cessation program');
+        suggestions.push('Talk to your doctor about nicotine replacement therapy');
+    }
+
+    // Age-based suggestions
+    if (age > 50) {
+        suggestions.push('Schedule regular health check-ups');
+        suggestions.push('Consider getting preventive screenings');
+    }
+
+    suggestions.forEach((suggestion, index) => {
+        const div = document.createElement('div');
+        div.className = 'suggestion-item';
+        div.style.animationDelay = `${index * 0.2}s`;
+        div.textContent = suggestion;
+        suggestionsContainer.appendChild(div);
+    });
+
+    // Scroll to results
+    result.scrollIntoView({ behavior: 'smooth' });
+});
+    </script>
+</body>
+</html>
